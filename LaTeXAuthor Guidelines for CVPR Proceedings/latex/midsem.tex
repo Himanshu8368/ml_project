@@ -1,0 +1,277 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{cvpr}
+\usepackage{times}
+\usepackage{float}
+\usepackage{epsfig}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor} % For color definitions
+\usepackage[breaklinks=true,bookmarks=false, colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue]{hyperref} % Change link colors
+
+\cvprfinalcopy % *** Uncomment this line for the final submission
+
+\def\cvprPaperID{****} % *** Enter the CVPR Paper ID here
+\def\httilde{\mbox{\tt\raisebox{-.5ex}{\symbol{126}}}}
+
+\setcounter{page}{1}
+\begin{document}
+% Adjust title and author section
+\title{\vspace{-5em}  CSE 343: Machine Learning Project Proposal \\ \vspace{-0.5em}}
+\author{
+Naman Jindal, naman22311@iiitd.ac.in \hspace{2em} % Adjust horizontal space here
+Nishchay Sharma, nishchay22331@iiitd.ac.in \\
+\vspace{0.3em} \\ % Adds vertical space between author groups
+Harshil Handoo, harshil22206@iiitd.ac.in \hspace{2em} % Adjust horizontal space here
+Himanshu Kumar, himanshu22215@iiitd.ac.in
+}
+
+\maketitle
+
+\begin{center}
+    {\bf\LARGE AgriPredict: Machine Learning-Based Crop Yield Prediction}
+\end{center}
+\vspace{0 in} % Space before the abstract text
+
+
+     In an era where agricultural efficiency and sustainability are more critical than ever, accurate crop yield prediction has become a key factor in ensuring food security and optimizing resource management. \textbf{AgriPredict leverages machine learning, by analyzing a range of influential factors such as area, rainfall, wind, crop type, and soil condition,it aims to deliver precise and actionable insights, predicting the quantity of crop yield.} This empowers farmers and agricultural stakeholders to make informed decisions and maximize productivity.
+
+
+
+%%%%%%%%% BODY TEXT
+\section{Motivation}
+
+%-------------------------------------------------------------------------
+\subsection{Problem Statement}
+
+Agriculture plays a crucial role in global food security, yet predicting crop yield remains challenging due to complex interactions between environmental factors. Traditional methods often rely on historical data and intuition, which may not fully capture modern agriculture's dynamic nature. Advanced, data-driven approaches are essential for improving crop yield predictions, especially in the face of climate change and resource constraints. This project aims to address this gap by applying machine learning techniques to enhance agricultural productivity and sustainability.
+
+\subsection{Motivation behind this project}
+
+The idea for AgriPredict was driven by the need to ensure food security amid climate challenges and population growth. We recognized that accurate crop yield prediction can significantly improve farming practices by enabling informed decision-making. Leveraging machine learning to analyze various factors affecting yield, our goal is to provide insights that help farmers optimize their practices and enhance productivity, contributing to a more secure and sustainable food supply.
+
+%------------------------------------------------------------------------
+\section{Related Work}
+
+\subsection{\href{https://www.researchgate.net/publication/381910719_Crop_Yield_Prediction_Using_Machine_Learning_A_Pragmatic_Approach}{Crop Yield Prediction Using Machine Learning: A Pragmatic Approach}}
+
+This study focuses on improving crop yield prediction in India's agricultural sector using machine learning techniques such as Random Forest, Adaboost, Gradient Boost, and SVM. It finds that Random Forest achieves the highest accuracy, helping farmers enhance their yields.
+\subsection{\href{https://www.mdpi.com/2073-4395/14/10/2264?form=MG0AV3}{Progress in Research on Deep Learning-Based Crop Yield Prediction}}
+
+This paper provides a comprehensive review of deep learning-based crop yield prediction methods, analyzing the advantages and challenges of various algorithms.
+
+\subsection{\href{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0291928}{Yield Prediction for Crops by Gradient-Based Algorithms}}
+
+This study evaluates machine learning algorithms for predicting crop yields, finding that CatBoost, LightGBM, and XGBoost outperform others.
+
+
+
+\section{Dataset: Dataset Details with Data Preprocessing Techniques:}
+In this project, we utilized a comprehensive dataset that includes records from various countries over several decades and multiple crop types. We collected data on pesticides and yield from the FAO, while rainfall and average temperature data came from the World Data Bank. After cleaning and merging the data, we created a final dataset with 28,242 rows and 7 columns.
+\begin{itemize}
+    \item \textbf{Area}: The country or region where the data is recorded.
+    \item \textbf{Item}: The type of crop (e.g., Maize, Potatoes, Wheat).
+    \item \textbf{Year}: The year of observation.
+    \item \textbf{hg/ha\_yield}: Crop yield measured in hectograms per hectare.
+    \item \textbf{average\_rain\_fall\_mm\_per\_year}: The average annual rainfall measured in millimeters.
+    \item \textbf{pesticides\_tonnes}: The amount of pesticide use measured in tonnes.
+    \item \textbf{avg\_temp}: The average temperature recorded during the year.
+\end{itemize}
+
+
+\subsection{Data Preprocessing}
+\begin{itemize}
+    \item \textbf{Filtering Countries}: Countries with fewer than 100 entries were removed to ensure that the dataset only includes regions with sufficient data for meaningful analysis. This filtering helps reduce noise and improve model training.
+    \item \textbf{Normalization and Scaling}: Continuous variables such as \texttt{hg/ha\_yield}, \texttt{average\_rain\_fall\_mm\_per\_year}, and \texttt{pesticides\_tonnes} were normalized using Min-Max scaling to ensure that each feature contributes equally during model training.
+    \item \textbf{Missing Values}: We didn’t find any missing values in the dataset, as each column contains 28,242 non-null entries.
+\end{itemize}
+
+\subsection{Dataset Visualization}
+      \textbf{Heatmap}: We created a heatmap and found a strong correlation between \texttt{Area} and both \texttt{pesticides} and \texttt{average\_rain\_fall\_mm\_per\_year}. Similarly, there is a clear link between \texttt{Item} and \texttt{hg/ha\_yield}, showing that crop type affects yield.
+%    \begin{figure}[H]
+%         \centering
+%         \includegraphics[width=0.5\linewidth]{heatmap.png}
+%         \caption{Heatmap}
+%         \label{fig:heatmap}
+%     \end{figure}
+    \textbf{Histograms}: We created histograms and drew a few key inferences. Most rainfall is concentrated between 0-1000mm, with very few areas experiencing around 3000mm. For \texttt{pesticides\_tonnes}, the majority of areas used little to no pesticides. The \texttt{avg\_temp} histogram showed most temperatures clustering around 25°C.
+    % \begin{figure}[H]
+    %     \centering
+    %     \includegraphics[width=0.4\linewidth]{output.png}
+    %     \caption{Histogram}
+    %     \label{fig:histogram}
+    % \end{figure}
+    \textbf{Pair Plots}: Pair plots were employed to observe relationships between multiple numerical features.
+    % \begin{figure}[H]
+    %     \centering
+    %     \includegraphics[width=0.4\linewidth]{output1.png}
+    %     \caption{Pair Plots}
+    %     \label{fig:pairplots}
+    % \end{figure}
+        \textbf{Scatter Plots}: These plots visualized trends such as yield over the years for each crop type and provided insights into how yield changes with increasing temperature or rainfall.
+        % \begin{figure}
+        %     \centering
+        %     \includegraphics[width=0.5\linewidth]{output3.png}
+        %     \caption{Scatter Plot}
+        %     \label{fig:enter-label}
+        % \end{figure}
+      \textbf{Violin Plots}: These plots helped us visualize the distribution of yield across different countries, indicating variance in productivity and agricultural practices.
+    % \begin{figure}[H]
+    %     \centering
+    %     \includegraphics[width=0.5\linewidth]{5.png}
+    %     \caption{Violin plot}
+    %     \label{fig:violinplot}
+    % \end{figure}
+     \textbf{Bar Charts}:
+    Apart from these, we created various bar charts to study pattern of yield over the years, some of them are as follows :
+        \begin{itemize}
+            \item \textbf{Yield for Different Crops over the Years}: Illustrated how crop yields for various items like wheat, rice, and maize have changed over time.
+            \item \textbf{Average Annual Rainfall by Country}: Showed regional differences in rainfall and its potential impact on yields.
+            \item \textbf{Average Annual Pesticide Usage by Country}: Helped identify countries with higher pesticide use and their corresponding crop yields, contributing to our analysis of pesticide impact.
+        \end{itemize}
+
+\section*{\textbf{The Million-Dollar Question: Does Pesticide Use Affect Yield?}}
+We wanted to analyze whether there was any relation between pesticide use and the yield of an area. To explore this, we plotted various visualizations to examine the correlation between pesticide usage and crop yield.
+
+\begin{enumerate}
+    \item We started by plotting the mean yield and mean pesticide usage of various countries.
+\end{enumerate}
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\linewidth]{3.png}
+%     \caption{Average Annual Pesticide Usage and hg/ha Yield by Country}
+%     \label{fig:pesticide_yield}
+% \end{figure}
+
+\subsection{Findings}
+Through our analysis, we discovered an intriguing pattern: while pesticide use initially increases yield production, there is a threshold beyond which yield begins to decline. Our findings suggest the following progression: as we use more pesticides, yield increases up to a maximum point, after which yield gradually decreases, eventually falling below the initial levels, regardless of further pesticide application.
+
+Notably, we observed exceptions to this pattern in countries like France and Japan, which are among the leading agricultural producers. While it is possible to increase production by using more pesticides, this increase is temporary; in the long run, using fewer pesticides proves to be more sustainable.
+
+
+\section{Methodology and Model Details}
+The prediction task involves selecting suitable machine learning models, performing feature engineering, and evaluating the models to determine the best-performing approach for crop yield prediction.
+
+\subsection{Data Splitting}
+ The dataset was split into a training set (70\%) and a testing set (30\%) to validate the model's performance on unseen data.
+
+
+\subsection{Model Selection}
+
+We trained and evaluated several models for predicting crop yields, achieving the following results:
+
+\begin{itemize}
+    \item \textbf{Linear Regression}: We first explored the linear relationship between attributes, achieving an accuracy of 65.44\%, an \( R^2 \) score of 0.65, and a mean squared error (MSE) of 2.35. This indicates moderate performance based on linear assumptions.
+    
+    \item \textbf{K-Nearest Neighbors (KNN)}: While this model captures local patterns, it produced a lower accuracy of 34.61\%, an \( R^2 \) score of 0.35, and a high MSE of 4.44. This indicates challenges with larger datasets and noise sensitivity.
+
+    \item \textbf{Decision Tree Regressor}: We used this model to split the dataset based on feature values, achieving an accuracy of 98.36\%, an \( R^2 \) score of 0.98, and an MSE of 1.11. While effective, it is prone to overfitting without proper tuning.
+
+    \item \textbf{Random Forest}: Utilizing an ensemble approach, we achieved the highest accuracy of 98.90\%, with an \( R^2 \) score of 0.99 and a low MSE of 7.49. This demonstrates excellent predictive power through the aggregation of multiple decision trees.
+
+    \item \textbf{Bagging Regressor}: This method improved accuracy by training multiple trees on random samples, achieving 98.91\% accuracy, an \( R^2 \) score of 0.99, and an MSE of 7.38. It effectively averaged predictions to enhance accuracy.
+
+    \item \textbf{Gradient Boosting}: We implemented this sequential technique, achieving an accuracy of 88.53\%, an \( R^2 \) score of 0.89, and an MSE of 7.79. It effectively corrected errors by focusing on complex patterns in the data.
+
+    \item \textbf{XGBoost}: This optimized implementation yielded an accuracy of 98.03\%, an \( R^2 \) score of 0.98, and an MSE of 1.34. Its efficiency in learning intricate patterns made it a strong performer.
+\end{itemize}
+\vspace{-20 pt}
+
+\subsection{Feature Engineering}
+\textbf{One-Hot Encoding}: Categorical variables such as \texttt{Area} and \texttt{Item} were transformed using one-hot encoding to convert them into a numerical format suitable for machine learning models. The transformation ensures that each category is represented by a unique binary vector, enabling the model to process non-numeric data. The code snippet below demonstrates the encoding process.
+
+\section{Results and Analysis}
+The performance of various machine learning models was evaluated based on their accuracy, Mean Squared Error (MSE), and R-squared (\(R^2\)) score. The table below summarizes the results:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{3cm}|c|c|c|} % Set a fixed width for the first column
+    \hline
+    \textbf{Model}            & \textbf{Accuracy} & \textbf{MSE}        & \textbf{\(R^2\) Score} \\ \hline
+    Linear Regression         & 0.6544            & 2.3483e+          & 0.6544                \\ \hline
+    Random Forest             & 0.9890            & 7.4885e+          & 0.9890                \\ \hline
+    Gradient Boost            & 0.8853            & 7.7930e+          & 0.8853                \\ \hline
+    XGBoost                   & 0.9803            & 1.3366e+          & 0.9803                \\ \hline
+    KNN                       & 0.3461            & 4.4431e+          & 0.3461                \\ \hline
+    Decision Tree             & 0.9836            & 1.1121e+          & 0.9836                \\ \hline
+    Bagging Regressor         & 0.9891            & 7.3779e+          & 0.9891                \\ \hline
+    \end{tabular}
+    \caption{Model performance comparison based on accuracy, MSE, and \(R^2\) score.}
+    \label{tab:results}
+\end{table}
+
+
+
+
+\subsection{Key Insights}
+\begin{itemize}[itemsep=-0.5em] % Adjust the value as needed
+    \item \textbf{Random Forest} and \textbf{Bagging Regressor} emerged as the top performers, indicating that ensemble methods can effectively model complex, non-linear interactions.
+    \item \textbf{XGBoost} and \textbf{Gradient Boosting} performed well but with slightly higher error rates, potentially due to the need for further hyperparameter tuning.
+    \item \textbf{Linear Regression} and \textbf{KNN} showed significantly lower accuracy, suggesting that these models struggle with the high dimensionality and complexity of the dataset.
+\end{itemize}
+
+\subsection{Bias Variance Analysis}
+As training set increases, bias and variance both are decreasing.
+
+
+% \begin{figure}[H] % 'H' option to enforce placement here
+%     \centering
+%     \includegraphics[width=0.5\linewidth]{00.png}
+%     \caption{Bias-Variance Analysis of the Random Forest model as a function of training set size. As training data increases, both bias and variance decrease.}
+%     \label{fig:random_forest_bias_variance}
+% \end{figure}
+% \vspace{-10 pt}
+    
+\section{Conclusion: Learnings, Work Left, and Contributions}
+AgriPredict demonstrates the potential of machine learning to transform the agricultural sector by offering accurate, data-driven insights into crop yields. By analyzing a diverse set of features across multiple regions, the model can aid farmers in making informed decisions that enhance productivity. Future work includes refining the model by integrating satellite imagery and other remote sensing data for even more accurate predictions.
+\subsection{Learnings}
+\begin{itemize}[itemsep=-0.5em]
+    \item We recognized the significance of data preprocessing, including handling missing values and normalizing features, to enhance model training.
+    \item Visualizations helped us understand the relationships between environmental factors and crop yield, guiding feature selection.
+    \item Utilizing ensemble models like Gradient Boosting and XGBoost enabled us to achieve high prediction accuracy by capturing complex data interactions.
+\end{itemize}
+\vspace{-10 pt}
+\subsection{Work Left}
+\begin{itemize}[itemsep=-0.5em]
+    \item Model Optimization: Further fine-tuning of the hyperparameters for Gradient Boosting and XGBoost to maximize prediction accuracy.
+    \item Deployment: Building a web-based application to enable farmers to input their data and receive yield predictions.
+    \item K-Fold Cross-Validation: Implement k-fold cross-validation in future iterations to ensure model robustness and mitigate overfitting.
+\end{itemize}
+\vspace{-15 pt}
+%------------------------------------------------------------------------
+\section{Timeline}
+
+
+In Week 1, we reviewed the Kaggle dataset to understand its structure and set clear project goals while establishing the working environment with necessary tools and libraries. Weeks 2 and 3 were dedicated to Exploratory Data Analysis (EDA), where we identified patterns, trends, and correlations through comprehensive visualizations and cleaned the dataset by addressing missing values and outliers. 
+
+In Week 4, we analyzed the correlation between pesticide use and crop yield, yielding valuable insights. Weeks 5 and 6 focused on training various models, including KNN, Random Forest, XGBoost, Decision Tree, and Linear Regression. We evaluated model performance using metrics such as accuracy, MSE, and R² score.
+
+In the upcoming weeks, we will concentrate on model evaluation and optimization, finalize model saving, and develop a user-friendly GUI interface. We will also make predictions, visualize results, and complete the project with comprehensive documentation and reporting.
+
+\section{Individual Contributions}
+
+
+\begin{itemize}[itemsep=-0.5em]
+ \item Harshil Handoo: Conducted data preprocessing, feature engineering, and implemented initial model training.
+\item Naman Jindal: Focused on data visualization, including heatmaps and scatter plots, and assisted with model evaluation.
+ \item Nishchay Sharma: Handled dataset integration, conducted literature review, and worked on cross-validation techniques.
+    \item Himanshu Kumar: Assisted in hyperparameter tuning, drafting detailed model descriptions, and writing the final report.
+    \end{itemize}
+
+\section{References}
+References to research papers:
+
+\begin{enumerate}
+    \item \url{https://www.researchgate.net/publication/381910719_Crop_Yield_Prediction_Using_Machine_Learning_A_Pragmatic_Approach}
+    \item \url{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0291928}
+    \item \url{https://www.sciencedirect.com/science/article/pii/S0168169920302301}
+    \item \url{https://www.kaggle.com/datasets/patelris/crop-yield-prediction-dataset}
+\end{enumerate}
+
+
+
+
+\end{document}
